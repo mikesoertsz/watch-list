@@ -16,6 +16,7 @@ export default function WatchList({}: Props) {
           </form>
         </div>
         <WatchForm />
+        <div></div>
       </div>
     </div>
   );
