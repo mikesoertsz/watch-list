@@ -3,7 +3,8 @@ import WatchForm from "@/components/WatchForm";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import React from "react";
-
+import { FiTrash } from "react-icons/fi";
+import deleteWatch from "../server-actions/deleteWatch";
 type Props = {};
 
 export default async function WatchList({}: Props) {
@@ -28,10 +29,10 @@ export default async function WatchList({}: Props) {
     console.error("error fetching watches:", error);
   }
 
-  console.log({ watches });
+  //   console.log({ watches });
 
   return (
-    <div>
+    <main className="flex min-h-screen bg-zinc-100">
       <div>
         <div>
           <h1>My watch list</h1>
@@ -42,23 +43,31 @@ export default async function WatchList({}: Props) {
           </form>
         </div>
         <WatchForm />
-        <div>
+        <ul className="flex flex-col items-start justify-start gap-2 m-12 w-3xl">
           {watches?.map((watch: any, index: number) => (
-            <div key={watch.id}>
+            <li
+              key={watch.id}
+              className="flex items-center justify-between w-full p-4 bg-white border rounded-md border-slate-100"
+            >
               <h2>
-                {watch.brand} - {watch.name}
+                {watch.brand} | {watch.model}
               </h2>
-              <div>
-                <form action={"deleteWatch"}>
+              <div className="flex items-center justify-center gap-1">
+                <form
+                  action={deleteWatch}
+                  className="flex items-center justify-center gap-2"
+                >
                   <input type="hidden" name="id" value={watch.id} />
-                  <button type="submit">Delete</button>
+                  <button type="submit" className="">
+                    <FiTrash className="flex items-center justify-center p-1 border rounded-sm w-7 h-7 hover:bg-red-600 hover:text-white hover:border-red-400" />
+                  </button>
                 </form>
                 <EditWatch watch={watch} />
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
-    </div>
+    </main>
   );
 }
